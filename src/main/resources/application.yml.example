@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/marktplatz
+    username: your_db_username
+    password: your_db_password
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://localhost:5432/marktplatz
+    user: your_db_username
+    password: your_db_password
+
+jwt:
+  secret: "generate-your-own-with-openssl-rand-base64-32"
+  expiration-ms: 900000
+  refresh-expiration-ms: 604800000
