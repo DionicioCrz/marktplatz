@@ -50,4 +50,13 @@ public class JwtService {
                 .signWith(getSigningKey())
                 .compact();
     }
+
+    public String extractRole(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("role", String.class);
+    }
 }
