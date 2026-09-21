@@ -6,6 +6,8 @@ import com.dionicio.marktplatz.entity.Category;
 import com.dionicio.marktplatz.entity.Product;
 import com.dionicio.marktplatz.repository.CategoryRepository;
 import com.dionicio.marktplatz.repository.ProductRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
+    @CacheEvict("products")
     public ProductResponse createProduct(ProductRequest productRequest) {
         Long categoryId = productRequest.categoryId();
         Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
@@ -57,11 +60,13 @@ public class ProductService {
         return toResponse(product);
     }
 
+    @CacheEvict(value = "products", allEntries = true)
     public Page<ProductResponse> listOfProducts(Pageable pageable) {
         Page<Product> products = productRepository.findAll(pageable);
         return products.map(this::toResponse);
     }
 
+    @CacheEvict(value = "products", allEntries = true)
     public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isEmpty()) {
@@ -87,6 +92,7 @@ public class ProductService {
         return toResponse(product);
     }
 
+    @CacheEvict(value = "products", allEntries = true)
     public void deleteProduct(Long id) {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isEmpty()) {
